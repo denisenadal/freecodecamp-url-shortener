@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +15,14 @@
     "mongodb": "^3.0.2",
     "mongoose": "^5.0.6",
     "valid-url": "^1.0.9"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denisenadal/freecodecamp-url-shortener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/denisenadal/freecodecamp-url-shortener/issues"
+  },
+  "homepage": "https://github.com/denisenadal/freecodecamp-url-shortener#readme"
 }
