@@ -1,13 +1,16 @@
 # freecodecamp-url-shortener #
 
 ## description ##
- Based on the project found here: https://www.freecodecamp.org/challenges/timestamp-microservice
+A simple api to create shortened urls. Based on the project found here: https://www.freecodecamp.org/challenges/url-shortener-microservice
+
+The github for my version is found here: https://github.com/denisenadal/freecodecamp-url-shortener
 
 ## endpoints ##
 ### / ###
 home/root contains an html version of the README.
 ### /new/:myURL ###
-the path to create a new shortened url. It will response with the old and new url in json.
+the path to create a new shortened url. It will response with the old and new url in json. It will accept both properly formatted urlencoded urls and plain text ones.
+
 ### /*****  ###
 the new url will be  a 5 character string path. visiting the path will redirect your browser to the originalUrl.
 
