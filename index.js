@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 var validUrl = require('valid-url');
 var app = new express();
 
+app.use(express.static('public') );
+
 mongoose.connect('mongodb://' + process.env.DB_USER + ':'+ process.env.DB_PASS + '@' + process.env.DB_HOST);
 var dbconnection = mongoose.connection;
 dbconnection.on('error',console.error.bind(console,'connection error') );
@@ -12,6 +14,7 @@ dbconnection.once('open',function(){
 	console.log('connected to db at mlabs');
 });
 
+//define schema of datbase object
 var urlObjSchema = mongoose.Schema({
 	originalUrl:{
 		type: String,
@@ -20,6 +23,8 @@ var urlObjSchema = mongoose.Schema({
 	},
 	shortUrl: String
 });
+
+//define methods for the Schema Type
 urlObjSchema.statics.findUrlObj = function(shortUrl,success,fail){
 	UrlObj.findOne({"shortUrl":shortUrl},
 		function(err,urlObj){
@@ -34,7 +39,6 @@ urlObjSchema.statics.findUrlObj = function(shortUrl,success,fail){
 		});
 };
 urlObjSchema.statics.makeUrlObj = function(submittedUrl,random, success, fail){
-	//console.log('called makeUrlObj');
 	var newUrlObj = new UrlObj({
 		originalUrl: submittedUrl,
 		shortUrl: random
@@ -50,14 +54,17 @@ urlObjSchema.statics.makeUrlObj = function(submittedUrl,random, success, fail){
 		}
 	});
 };
+
+//make the schema an active model to be used
 var UrlObj = mongoose.model('UrlObj',urlObjSchema);
 
 
-
+//home page should show intro
 app.get('/',function(req,res){
 	res.status(200).end('home');
 });
 
+//path for creating a new link
 app.get('/new/:url',function(req,res){
 	if(!validUrl.isUri(req.params.url) ){
 		res.status(400).json({err:"that doesn't look like a url"});
@@ -73,13 +80,16 @@ app.get('/new/:url',function(req,res){
 
 });
 
+//any other url
 app.get('/*',function(req,res){
+	//if it's not the right size for a shortened url, reject it
 	if(req._parsedUrl.path.substr(1).length !== 5 ){
 		res.status(400).json({err:"that's not the right length. Sure you have the right url?'"});
 	}
 	else{
+		//else look for it in the database, if found, redirect user
 		UrlObj.findUrlObj(req._parsedUrl.path.substr(1), function(urlObj){
-			res.status(200).json( urlObj);
+			res.redirect(302,UrlObj.originalUrl);
 		},function(err){
 			res.status(500).json( {'err':err});
 		});
